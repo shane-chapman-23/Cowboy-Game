@@ -55,7 +55,6 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         StateMachine.CurrentState.PhysicsUpdate();
-        Debug.Log(InputHandler.InteractDoubleClick);
     }
 
     public void SetVelocityX(float velocity)
