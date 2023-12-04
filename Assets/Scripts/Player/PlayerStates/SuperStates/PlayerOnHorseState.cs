@@ -9,6 +9,7 @@ public class PlayerOnHorseState : PlayerState
     protected int xInput;
     protected int lastXInput;
     protected bool interactInput;
+    protected bool interactDoubleClick;
 
 
     protected float movementStateChangeCooldownTimer;
@@ -34,11 +35,14 @@ public class PlayerOnHorseState : PlayerState
         //reset movementStateChangeCooldownTimer when entering a new movement state
         movementStateChangeCooldownTimer = 0;
 
+
     }
 
     public override void Exit()
     {
         base.Exit(); 
+
+
     }
 
     public override void LogicUpdate()
@@ -47,6 +51,7 @@ public class PlayerOnHorseState : PlayerState
 
         xInput = player.InputHandler.NormInputX;
         interactInput = player.InputHandler.InteractInput;
+        interactDoubleClick = player.InputHandler.InteractDoubleClick;
 
         //starts the movementStateChangeCooldownTimer
         movementStateChangeCooldownTimer += Time.deltaTime;
@@ -94,8 +99,6 @@ public class PlayerOnHorseState : PlayerState
         float newVelocityX = player.CurrentVelocity.x - Math.Sign(player.CurrentVelocity.x) * deceleration * Time.deltaTime;
 
         player.SetVelocityX(newVelocityX);
-
-        Debug.Log(newVelocityX);
     }
 
     //if the player is moving and there is no input a timer will start, once the timer reachers the postInputMovementDuration, change to the previous movement state
@@ -113,8 +116,9 @@ public class PlayerOnHorseState : PlayerState
     //Also using a timer to prevent players from changing states too quickly.
     public void SpeedIncreaseStateChange(PlayerState newState)
     {
-        if (xInput != 0 && interactInput && movementStateChangeCooldownTimer >= movementStateChangeCooldownDelay)
+        if (xInput != 0 && interactDoubleClick && movementStateChangeCooldownTimer >= movementStateChangeCooldownDelay)
         {
+            player.InputHandler.SetInteractDoubleClickFalse();
             stateMachine.ChangeState(newState);
         }
     }
@@ -122,7 +126,7 @@ public class PlayerOnHorseState : PlayerState
     //If the player is moving and pushes the opposite direction, change to one of the stopping states
     public void PlayerStoppingStateChange(PlayerState newState)
     {
-        if (Math.Sign(player.CurrentVelocity.x) != Math.Sign(xInput))
+        if ((Math.Sign(player.CurrentVelocity.x) != Math.Sign(xInput)) && xInput != 0)
         {
             stateMachine.ChangeState(newState);
         }

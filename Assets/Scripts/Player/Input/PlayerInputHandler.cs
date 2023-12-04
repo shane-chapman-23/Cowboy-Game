@@ -11,11 +11,15 @@ public class PlayerInputHandler : MonoBehaviour
     public int NormInputY { get; private set; }
 
     public bool InteractInput { get; private set; }
+    public bool InteractDoubleClick { get; private set; }
+    public int InteractDoubleClickCount { get; private set; }
+    public float interactDoubleClickThresholdTime = 0.2f;
+    public float InteractDoubleClickTimer { get; private set; }
 
-    private void LateUpdate()
+
+    private void Update()
     {
-        //Sets the input to false at the end of each frame so the player cant hold down the interact button to continuously speed up
-        InteractInput = false;
+        CheckInteractDoubleClick();
     }
 
     public void OnMoveInput(InputAction.CallbackContext context)
@@ -29,9 +33,46 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void OnInteractInput(InputAction.CallbackContext context)
     {
-        if(context.started)
+        if (context.started)
         {
             InteractInput = true;
+            InteractDoubleClickCount++;
         }
+
+        if (context.canceled)
+        {
+            InteractInput = false;
+        }
+    }
+
+    //Checks if the player has double clicked the interact button within a certain timeframe (interactDoubleClickThresholdTime)
+    public void CheckInteractDoubleClick()
+    {
+        if(InteractDoubleClickCount == 1)
+        {
+            InteractDoubleClickTimer += Time.deltaTime;
+        }
+
+        if (InteractDoubleClickTimer <= interactDoubleClickThresholdTime && InteractDoubleClickCount == 2)
+        {
+            InteractDoubleClick = true;
+        }
+        else if (InteractDoubleClickTimer > interactDoubleClickThresholdTime || InteractDoubleClickCount == 2)
+        {
+            InteractDoubleClick = false;
+        }
+
+        if (InteractDoubleClickCount == 2 || InteractDoubleClickTimer > interactDoubleClickThresholdTime)
+        {
+            InteractDoubleClickCount = 0;
+            InteractDoubleClickTimer = 0;
+        }
+
+    }
+
+    //Sets the interactDoubleClick to false after use.
+    public void SetInteractDoubleClickFalse()
+    {
+        InteractDoubleClick = false;
     }
 }
