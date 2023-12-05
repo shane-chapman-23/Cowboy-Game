@@ -33,10 +33,15 @@ public class PlayerIdleState : PlayerOnHorseState
         base.LogicUpdate();
 
         //If there is a movement input by the player, change to walking state.
-        if (xInput != 0)
+        if (xInput != player.FacingDirection && xInput != 0)
+        {
+            stateMachine.ChangeState(player.TurningState);
+        } 
+        else if (xInput == player.FacingDirection)
         {
             stateMachine.ChangeState(player.WalkingState);
         }
+
     }
 
     public override void PhysicsUpdate()

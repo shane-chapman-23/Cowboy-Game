@@ -13,16 +13,19 @@ public class Player : MonoBehaviour
     public PlayerGallopState GallopState { get; private set; }
     public PlayerHardStoppingState HardStoppingState { get; private set; }
     public PlayerSoftStoppingState SoftStoppingState { get; private set; }
+    public PlayerTurningState TurningState { get; private set; }
 
     public Animator Anim { get; private set; }
     public PlayerInputHandler InputHandler { get; private set; }
     public Rigidbody2D RB { get; private set; }
     public Vector2 CurrentVelocity { get; private set; }
+    public int FacingDirection { get; private set; }
 
     [SerializeField]
     private PlayerData playerData;
 
     private Vector2 workspace;
+    private int xInput;
 
     private void Awake()
     {
@@ -35,6 +38,7 @@ public class Player : MonoBehaviour
         GallopState = new PlayerGallopState(this, StateMachine, playerData, "gallop");
         HardStoppingState = new PlayerHardStoppingState(this, StateMachine, playerData, "hardStopping");
         SoftStoppingState = new PlayerSoftStoppingState(this, StateMachine, playerData, "softStopping");
+        TurningState = new PlayerTurningState(this, StateMachine, playerData, "turning");
     }
 
     private void Start()
@@ -42,6 +46,8 @@ public class Player : MonoBehaviour
         Anim = GetComponent<Animator>();
         InputHandler = GetComponent<PlayerInputHandler>();
         RB = GetComponent<Rigidbody2D>();
+
+        FacingDirection = 1;
 
         StateMachine.Initialize(IdleState);
     }
@@ -63,4 +69,18 @@ public class Player : MonoBehaviour
         RB.velocity = workspace;
         CurrentVelocity = workspace;
     }
+
+    public void Flip()
+    {
+        FacingDirection *= -1;
+        transform.Rotate(0f, 180f, 0f);
+    }
+
+    public void OnTurnAnimationEnd()
+    {
+        Flip();
+        StateMachine.ChangeState(IdleState);
+        
+    }
+
 }
