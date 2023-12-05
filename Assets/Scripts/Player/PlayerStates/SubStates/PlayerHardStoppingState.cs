@@ -16,12 +16,12 @@ public class PlayerHardStoppingState : PlayerOnHorseState
 
     public override void Enter()
     {
-
+       player.Anim.SetBool("hardStopping", true);
     }
 
     public override void Exit()
     {
-
+        player.Anim.SetBool("hardStopping", false);
     }
 
     public override void LogicUpdate()
