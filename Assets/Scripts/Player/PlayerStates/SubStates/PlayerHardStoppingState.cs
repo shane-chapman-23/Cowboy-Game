@@ -11,28 +11,30 @@ public class PlayerHardStoppingState : PlayerOnHorseState
 
     public override void DoChecks()
     {
-
+        base.DoChecks();
     }
 
     public override void Enter()
     {
-       player.Anim.SetBool("hardStopping", true);
+        base.Enter();
     }
 
     public override void Exit()
     {
-        player.Anim.SetBool("hardStopping", false);
+        base.Exit();
     }
 
     public override void LogicUpdate()
     {
+        base.LogicUpdate();
+        
         SetDecelerationSpeed(playerData.hardDecelerationSpeed);
 
-        StoppingToIdleStateTransition();
+        TransitionFromStoppingToIdleStateCheck();
     }
 
     public override void PhysicsUpdate()
     {
-
+        base.PhysicsUpdate();
     }
 }

@@ -20,16 +20,21 @@ public class PlayerWalkingState : PlayerOnHorseState
     {
         base.Enter();
 
+        // GameObject.FindObjectOfType<AudioManager>().Play("horseWalkingDirt");
     }
 
     public override void Exit()
     {
         base.Exit();
+
+        // GameObject.FindObjectOfType<AudioManager>().Stop("horseWalkingDirt");
     }
 
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+
+        
 
         SetMovementSpeed(playerData.walkingVelocity);
 
@@ -37,8 +42,7 @@ public class PlayerWalkingState : PlayerOnHorseState
 
         SpeedIncreaseStateChange(player.TrottingState);
 
-        PlayerStoppingStateChange(player.SoftStoppingState);
-
+        ChangeToStoppingStateCheck(player.SoftStoppingState);
     }
 
     public override void PhysicsUpdate()

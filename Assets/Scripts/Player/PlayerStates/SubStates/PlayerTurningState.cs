@@ -18,25 +18,16 @@ public class PlayerTurningState : PlayerOnHorseState
     public override void Enter()
     {
         base.Enter();
-
     }
 
     public override void Exit()
     {
         base.Exit();
-
     }
 
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-
-        // if (player.Anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95f)
-        // {
-        //     OnTurnAnimationEnd();
-        // }
-
-
     }
 
     public override void PhysicsUpdate()

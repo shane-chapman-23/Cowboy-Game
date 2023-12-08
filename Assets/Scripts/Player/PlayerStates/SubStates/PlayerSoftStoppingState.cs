@@ -32,7 +32,7 @@ public class PlayerSoftStoppingState : PlayerOnHorseState
 
         SetDecelerationSpeed(playerData.softDecelerationSpeed);
 
-        StoppingToIdleStateTransition();
+        TransitionFromStoppingToIdleStateCheck();
     }
 
     public override void PhysicsUpdate()

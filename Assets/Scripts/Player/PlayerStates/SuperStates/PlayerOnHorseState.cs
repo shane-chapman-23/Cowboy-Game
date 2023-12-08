@@ -34,15 +34,11 @@ public class PlayerOnHorseState : PlayerState
         
         //reset movementStateChangeCooldownTimer when entering a new movement state
         movementStateChangeCooldownTimer = 0;
-
-
     }
 
     public override void Exit()
     {
         base.Exit(); 
-
-
     }
 
     public override void LogicUpdate()
@@ -56,8 +52,18 @@ public class PlayerOnHorseState : PlayerState
         //starts the movementStateChangeCooldownTimer
         movementStateChangeCooldownTimer += Time.deltaTime;
 
-        //if the player is holding movement key, set lastXInput to the current xInput and reset the postInputMovementDurationTimer
-        //else if the player is not holding a movement key, start the postInputMovementDurationTimer
+        HandleMovementInput();
+    }
+
+    public override void PhysicsUpdate()
+    {
+        base.PhysicsUpdate();
+    }
+        
+    //if the player is holding movement key, set lastXInput to the current xInput and reset the postInputMovementDurationTimer
+    //else if the player is not holding a movement key, start the postInputMovementDurationTimer
+    private void HandleMovementInput()
+    {
         if (xInput != 0)
         {
             lastXInput = xInput;
@@ -67,14 +73,6 @@ public class PlayerOnHorseState : PlayerState
         {
             postInputMovementDurationTimer += Time.deltaTime;
         }
-
-        
-
-    }
-
-    public override void PhysicsUpdate()
-    {
-        base.PhysicsUpdate();
     }
 
     //Sets the velocity of the player
@@ -123,8 +121,8 @@ public class PlayerOnHorseState : PlayerState
         }
     }
 
-    //If the player is moving and pushes the opposite direction, change to one of the stopping states
-    public void PlayerStoppingStateChange(PlayerState newState)
+    //If the player is moving and inputs the opposite direction, change to one of the stopping states
+    public void ChangeToStoppingStateCheck(PlayerState newState)
     {
         if ((Math.Sign(player.CurrentVelocity.x) != Math.Sign(xInput)) && xInput != 0)
         {
@@ -132,8 +130,8 @@ public class PlayerOnHorseState : PlayerState
         }
     }
 
-    //checks where the player is moving slower than the stopVelocityThreshold, is so, change to idle state
-    public void StoppingToIdleStateTransition()
+    //checks where the player is moving slower than the stopVelocityThreshold, if so, change from the stopping state, into the idle state.
+    public void TransitionFromStoppingToIdleStateCheck()
     {
         if (Math.Abs(player.CurrentVelocity.x) <= playerData.stopVelocityThreshold)
         {

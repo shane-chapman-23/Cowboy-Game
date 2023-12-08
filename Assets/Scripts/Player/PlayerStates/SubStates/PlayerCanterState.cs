@@ -18,12 +18,15 @@ public class PlayerCanterState : PlayerOnHorseState
     public override void Enter()
     {
         base.Enter();
+        // GameObject.FindObjectOfType<AudioManager>().Play("horseCanterDirt");
 
     }
 
     public override void Exit()
     {
         base.Exit();
+        // GameObject.FindObjectOfType<AudioManager>().Stop("horseCanterDirt");
+
     }
 
     public override void LogicUpdate()
@@ -36,8 +39,7 @@ public class PlayerCanterState : PlayerOnHorseState
 
         SpeedIncreaseStateChange(player.GallopState);
 
-        PlayerStoppingStateChange(player.SoftStoppingState);
-
+        ChangeToStoppingStateCheck(player.SoftStoppingState);
     }
 
     public override void PhysicsUpdate()
